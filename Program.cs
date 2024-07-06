@@ -4,21 +4,8 @@
     {
     static void Main()
         {
-/*            ReadOnlySpan<string> supportedGames = ["s1_mp64_ship.exe", "s1_sp64_ship.exe"];
             Console.Title = "CoD Files Cleaner";
-            foreach (var s in supportedGames)
-            {
-                Console.WriteLine(s);
-                if (File.Exists(s))
-                {
-                    break;
-                }
-                DisplayMessage("Please run this appliction in your Advanced Warfare Game Directory.", ConsoleColor.Red);
-                Console.WriteLine("Press any key to continue...");
-                Console.ReadKey(true);
-                return;
-            }*/
-            if (!File.Exists("s1_mp64_ship.exe") && !File.Exists("s1_sp64_ship.exe"))
+            if (!CheckForGames())
             {
                 DisplayMessage("Please run this appliction in your Advanced Warfare Game Directory.", ConsoleColor.Red);
                 Console.WriteLine("Press any key to continue...");
@@ -64,7 +51,7 @@
             }
             if (engFastFiles.Count > 0)
             {
-                const string engZoneDir = @"zone\english";
+                const string engZoneDir = @"zone/english";
                 if (!Directory.Exists(engZoneDir))
                 {
                     Directory.CreateDirectory(engZoneDir);
@@ -158,9 +145,18 @@
             using var sw = new StreamWriter("./CoDFileCleaner.log", true);
             sw.WriteLine(message);
         }
+        private static bool CheckForGames()
+        {
+            ReadOnlySpan<string> supportedGames = ["s1_mp64_ship.exe", "s1_sp64_ship.exe"];
+            foreach (var s in supportedGames)
+            {
+                if (File.Exists(s))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 }
-/*private static void CheckForGames()
-{
-    string[] supportedGames = ["s1_mp64_ship.exe", "s1_sp64_ship.exe"];
-}*/
+
