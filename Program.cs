@@ -4,10 +4,10 @@
     {
     static void Main()
         {
-            Console.Title = "CoD Files Cleaner";
-            if (!CheckForGames())
+            Console.Title = "CoD Files Cleaner by Praveshan";
+            if (!CheckForGamesInCurrentDir())
             {
-                DisplayMessage("Please run this appliction in your Advanced Warfare Game Directory.", ConsoleColor.Red);
+                DisplayMessage("Please run this appliction in your Advanced Warfare, Ghosts or Modern Warfare Remastered Game Directory.", ConsoleColor.Red);
                 Console.WriteLine("Press any key to continue...");
                 Console.ReadKey(true);
                 return;
@@ -145,12 +145,13 @@
             using var sw = new StreamWriter("./CoDFileCleaner.log", true);
             sw.WriteLine(message);
         }
-        private static bool CheckForGames()
+        private static bool CheckForGamesInCurrentDir()
         {
-            ReadOnlySpan<string> supportedGames = ["s1_mp64_ship.exe", "s1_sp64_ship.exe"];
-            foreach (var s in supportedGames)
+            ReadOnlySpan<string> supportedGames = ["s1_mp64_ship.exe", "s1_sp64_ship.exe", "iw6mp64_ship.exe", "iw6sp64_ship.exe", "h1_sp64_ship.exe", "h1_mp64_ship.exe"];
+            var exeFiles = Directory.EnumerateFiles("./", "*.exe").Select(f => Path.GetFileName(f));
+            foreach (var exeFile in exeFiles)
             {
-                if (File.Exists(s))
+                if (supportedGames.Contains(exeFile))
                 {
                     return true;
                 }
