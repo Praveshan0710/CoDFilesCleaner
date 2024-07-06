@@ -60,7 +60,7 @@
                 }
                 foreach (var f in engFastFiles)
                 {
-                    File.Move(f, Path.Combine(engZoneDir, Path.GetFileName(f)));
+                    File.Move(f, Path.Combine(engZoneDir, f));
                     Console.WriteLine($"{f} was moved to {engZoneDir}");
                     LogChange($"{f} was moved to {engZoneDir}");
                 }
@@ -76,7 +76,7 @@
                 }
                 foreach (var f in commonFastFiles)
                 {
-                    File.Move(f, Path.Combine(zoneDir, Path.GetFileName(f)));
+                    File.Move(f, Path.Combine(zoneDir, f));
                     Console.WriteLine($"{f} was moved to {zoneDir}");
                     LogChange($"{f} was moved to {zoneDir}");
                 }
@@ -104,7 +104,7 @@
                 
                 foreach (var f in pakFiles)
                 {
-                    File.Move(f, Path.Combine(zoneDir, Path.GetFileName(f)));
+                    File.Move(f, Path.Combine(zoneDir, f));
                     Console.WriteLine($"{f} was moved to {zoneDir}");
                     LogChange($"{f} was moved to {zoneDir}");
                 }
@@ -132,7 +132,7 @@
 
                 foreach (var f in bikFiles)
                 {
-                    File.Move(f, Path.Combine(videoDir, Path.GetFileName(f)));
+                    File.Move(f, Path.Combine(videoDir, f));
                     Console.WriteLine($"{f} was moved to {videoDir}");
                     LogChange($"{f} was moved to {videoDir}");
                 }
