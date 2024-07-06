@@ -2,24 +2,28 @@
 {
     internal class Program
     {
-        static readonly string[] supportedGames = ["s1_mp64_ship.exe", "s1_sp64_ship.exe"];
-        //static StreamWriter sw = new StreamWriter("./log.txt", false);
     static void Main()
         {
+/*            ReadOnlySpan<string> supportedGames = ["s1_mp64_ship.exe", "s1_sp64_ship.exe"];
             Console.Title = "CoD Files Cleaner";
             foreach (var s in supportedGames)
             {
+                Console.WriteLine(s);
                 if (File.Exists(s))
                 {
                     break;
                 }
-                else
-                {
-                    DisplayMessage("Please run this appliction in your Advanced Warfare Game Directory.", ConsoleColor.Red);
-                    Console.WriteLine("Press any key to continue...");
-                    Console.ReadKey(true);
-                    return;
-                }
+                DisplayMessage("Please run this appliction in your Advanced Warfare Game Directory.", ConsoleColor.Red);
+                Console.WriteLine("Press any key to continue...");
+                Console.ReadKey(true);
+                return;
+            }*/
+            if (!File.Exists("s1_mp64_ship.exe") && !File.Exists("s1_sp64_ship.exe"))
+            {
+                DisplayMessage("Please run this appliction in your Advanced Warfare Game Directory.", ConsoleColor.Red);
+                Console.WriteLine("Press any key to continue...");
+                Console.ReadKey(true);
+                return;
             }
             CleanFiles();
             DisplayMessage("File Changes were saved at ./CoDFileCleaner.log", ConsoleColor.Cyan);
