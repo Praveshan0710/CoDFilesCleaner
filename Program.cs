@@ -35,21 +35,9 @@
         private static void CleanFastFiles()
         {
             DisplayMessage("Cleaning .ff files...\n", ConsoleColor.Blue);
-            List<string> engFastFiles = [];
-            List<string> commonFastFiles = [];
+            string[] engFastFiles = Directory.GetFiles(@".\").Where(f => f.StartsWith(@".\eng_")).ToArray();
 
-            foreach (var fastFile in Directory.EnumerateFiles("./", "*.ff"))
-            {
-                if (fastFile.StartsWith("./eng_"))
-                {
-                    engFastFiles.Add(fastFile);
-                }
-                else
-                {
-                    commonFastFiles.Add(fastFile);
-                }
-            }
-            if (engFastFiles.Count > 0)
+            if (engFastFiles.Length > 0)
             {
                 const string engZoneDir = @"zone/english";
                 if (!Directory.Exists(engZoneDir))
@@ -65,7 +53,10 @@
                     LogChange($"{f} was moved to {engZoneDir}");
                 }
             }
-            if (commonFastFiles.Count > 0)
+
+            string[] commonFastFiles = Directory.GetFiles(@".\", "*.ff");
+
+            if (commonFastFiles.Length > 0)
             {
                 const string zoneDir = @"zone";
                 if (!Directory.Exists(zoneDir))
@@ -82,7 +73,6 @@
                 }
             }
             DisplayMessage("\nCompleted .ff file clean...\n", ConsoleColor.Green);
-            //LogChange("Completed .ff file clean...\n");
         }
         private static void CleanPakFiles()
         {
@@ -110,7 +100,6 @@
                 }
             }
             DisplayMessage("\nCompleted .pak file clean...\n", ConsoleColor.Green);
-            //LogChange("\nCompleted .pak file clean...\n");
         }
         private static void CleanBikFiles()
         {
