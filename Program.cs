@@ -35,7 +35,7 @@
         private static void CleanFastFiles()
         {
             DisplayMessage("Cleaning .ff files...\n", ConsoleColor.Blue);
-            string[] engFastFiles = Directory.GetFiles(@".\").Where(f => f.StartsWith(@".\eng_")).ToArray();
+            string[] engFastFiles = Directory.GetFiles(@".\", @".\eng_*.ff");
 
             if (engFastFiles.Length > 0)
             {
@@ -77,12 +77,8 @@
         private static void CleanPakFiles()
         {
             DisplayMessage("\nCleaning .pak files...\n", ConsoleColor.Blue);
-            List<string> pakFiles = [];
-            foreach (var pakfile in Directory.GetFiles("./", "*.pak"))
-            {
-                pakFiles.Add(pakfile);
-            }
-            if (pakFiles.Count > 0)
+            string[] pakFiles = Directory.GetFiles("./", "*.pak");
+            if (pakFiles.Length > 0)
             {
                 const string zoneDir = @"zone";
                 if (!Directory.Exists(zoneDir))
@@ -104,12 +100,8 @@
         private static void CleanBikFiles()
         {
             DisplayMessage("\nCleaning .bik files...\n", ConsoleColor.Blue);
-            List<string> bikFiles = [];
-            foreach (var pakfile in Directory.GetFiles("./", "*.bik"))
-            {
-                bikFiles.Add(pakfile);
-            }
-            if (bikFiles.Count > 0)
+            string[] bikFiles = Directory.GetFiles("./", "*.bik");
+            if (bikFiles.Length > 0)
             {
                 const string videoDir = @"raw\video";
                 if (!Directory.Exists(videoDir))
@@ -127,7 +119,6 @@
                 }
             }
             DisplayMessage("\nCompleted .bik file clean...\n", ConsoleColor.Green);
-            //LogChange("\nCompleted .bik file clean...\n");
         }
         private static void LogChange(string message)
         {
@@ -136,7 +127,7 @@
         }
         private static bool CheckForGamesInCurrentDir()
         {
-            ReadOnlySpan<string> supportedGames = ["s1_mp64_ship.exe", "s1_sp64_ship.exe", "iw6mp64_ship.exe", "iw6sp64_ship.exe", "h1_sp64_ship.exe", "h1_mp64_ship.exe"];
+            string[] supportedGames = { "s1_mp64_ship.exe", "s1_sp64_ship.exe", "iw6mp64_ship.exe", "iw6sp64_ship.exe", "h1_sp64_ship.exe", "h1_mp64_ship.exe" };
             var exeFiles = Directory.EnumerateFiles("./", "*.exe").Select(f => Path.GetFileName(f));
             foreach (var exeFile in exeFiles)
             {
