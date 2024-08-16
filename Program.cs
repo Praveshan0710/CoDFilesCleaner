@@ -1,143 +1,64 @@
 ﻿namespace CoDFilesCleaner
 {
-    internal class Program
+    public sealed class Program
     {
     static void Main()
         {
-            Console.Title = "CoD Files Cleaner by Praveshan";
-            if (!CheckForGamesInCurrentDir())
+            Console.Title = "CoDFilesCleaner by Praveshan";
+            if (!IsSupportedGameDir())
             {
                 DisplayMessage("Please run this appliction in your Advanced Warfare, Ghosts or Modern Warfare Remastered Game Directory.", ConsoleColor.Red);
                 Console.WriteLine("Press any key to continue...");
                 Console.ReadKey(true);
                 return;
             }
-            CleanFiles();
-            DisplayMessage("File Changes were saved at ./CoDFileCleaner.log", ConsoleColor.Cyan);
-            Console.WriteLine("Press any key to continue...");
-            Console.ReadKey(true);
+
+            // Options
+            do
+            {
+                Console.Clear();
+                DisplayMessage("[C] Clean your game files", ConsoleColor.Cyan);
+                DisplayMessage("[U] Undo cleaning, match Steam install (MWR only)", ConsoleColor.Cyan);
+
+                switch (Console.ReadKey(true).Key)
+                {
+                    case ConsoleKey.C:
+                        Console.WriteLine("Cleaning...");
+                        Files.CleanAllFiles();
+                        DisplayMessage("File Changes were saved at CoDFileCleaner.log", ConsoleColor.Cyan);
+                        Console.WriteLine("Press any key to continue...");
+                        Console.ReadKey(true);
+                        break;
+
+                    case ConsoleKey.U:
+                        if (!File.Exists("h1_sp64_ship.exe") || !File.Exists("h1_mp64_ship.exe"))
+                        {
+                            DisplayMessage("This only supports Modern Warfare Remastered", ConsoleColor.Red);
+                            Console.WriteLine("Press any key to continue...");
+                            Console.ReadKey(true);
+                            break;
+                        }
+                        Files.UndoClean();
+                        DisplayMessage("File Changes were saved at CoDFileCleaner.log", ConsoleColor.Cyan);
+                        Console.WriteLine("Press any key to continue...");
+                        Console.ReadKey(true);
+                        break;
+                }
+
+            } while (true);
+            
         }
-        private static void DisplayMessage(string message, ConsoleColor messageColor)
+        public static void DisplayMessage(string message, ConsoleColor messageColor)
         {
             ConsoleColor currentColor = Console.ForegroundColor;
             Console.ForegroundColor = messageColor;
             Console.WriteLine(message);
             Console.ForegroundColor = currentColor;
         }
-        private static void CleanFiles()
+        private static bool IsSupportedGameDir()
         {
-            DisplayMessage("Cleaning Files...\n", ConsoleColor.Blue);
-            CleanFastFiles();
-            CleanPakFiles();
-            CleanBikFiles();
-            DisplayMessage("File clean up was completed!\n", ConsoleColor.Green);
-        }
-        private static void CleanFastFiles()
-        {
-            DisplayMessage("Cleaning .ff files...\n", ConsoleColor.Blue);
-            string[] engFastFiles = Directory.GetFiles(@".\", @".\eng_*.ff");
-
-            if (engFastFiles.Length > 0)
-            {
-                const string engZoneDir = @"zone/english";
-                if (!Directory.Exists(engZoneDir))
-                {
-                    Directory.CreateDirectory(engZoneDir);
-                    DisplayMessage($"\nCreated {engZoneDir}\n", ConsoleColor.Magenta);
-                    LogChange($"\nCreated {engZoneDir}\n");
-                }
-                foreach (var f in engFastFiles)
-                {
-                    File.Move(f, Path.Combine(engZoneDir, f));
-                    Console.WriteLine($"{f} was moved to {engZoneDir}");
-                    LogChange($"{f} was moved to {engZoneDir}");
-                }
-            }
-
-            string[] commonFastFiles = Directory.GetFiles(@".\", "*.ff");
-
-            if (commonFastFiles.Length > 0)
-            {
-                const string zoneDir = @"zone";
-                if (!Directory.Exists(zoneDir))
-                {
-                    Directory.CreateDirectory(zoneDir);
-                    DisplayMessage($"\nCreated {zoneDir}\n", ConsoleColor.Magenta);
-                    LogChange($"\nCreated {zoneDir}\n");
-                }
-                foreach (var f in commonFastFiles)
-                {
-                    File.Move(f, Path.Combine(zoneDir, f));
-                    Console.WriteLine($"{f} was moved to {zoneDir}");
-                    LogChange($"{f} was moved to {zoneDir}");
-                }
-            }
-            DisplayMessage("\nCompleted .ff file clean...\n", ConsoleColor.Green);
-        }
-        private static void CleanPakFiles()
-        {
-            DisplayMessage("\nCleaning .pak files...\n", ConsoleColor.Blue);
-            string[] pakFiles = Directory.GetFiles("./", "*.pak");
-            if (pakFiles.Length > 0)
-            {
-                const string zoneDir = @"zone";
-                if (!Directory.Exists(zoneDir))
-                {
-                    Directory.CreateDirectory(zoneDir);
-                    DisplayMessage($"\n{zoneDir} was created\n", ConsoleColor.Magenta);
-                    LogChange($"\n{zoneDir} was created\n");
-                }
-                
-                foreach (var f in pakFiles)
-                {
-                    File.Move(f, Path.Combine(zoneDir, f));
-                    Console.WriteLine($"{f} was moved to {zoneDir}");
-                    LogChange($"{f} was moved to {zoneDir}");
-                }
-            }
-            DisplayMessage("\nCompleted .pak file clean...\n", ConsoleColor.Green);
-        }
-        private static void CleanBikFiles()
-        {
-            DisplayMessage("\nCleaning .bik files...\n", ConsoleColor.Blue);
-            string[] bikFiles = Directory.GetFiles("./", "*.bik");
-            if (bikFiles.Length > 0)
-            {
-                const string videoDir = @"raw\video";
-                if (!Directory.Exists(videoDir))
-                {
-                    Directory.CreateDirectory(videoDir);
-                    DisplayMessage($"\nCreated {videoDir}\n", ConsoleColor.Magenta);
-                    LogChange($"\nCreated {videoDir}\n");
-                }
-
-                foreach (var f in bikFiles)
-                {
-                    File.Move(f, Path.Combine(videoDir, f));
-                    Console.WriteLine($"{f} was moved to {videoDir}");
-                    LogChange($"{f} was moved to {videoDir}");
-                }
-            }
-            DisplayMessage("\nCompleted .bik file clean...\n", ConsoleColor.Green);
-        }
-        private static void LogChange(string message)
-        {
-            using var sw = new StreamWriter("./CoDFileCleaner.log", true);
-            sw.WriteLine(message);
-        }
-        private static bool CheckForGamesInCurrentDir()
-        {
-            string[] supportedGames = { "s1_mp64_ship.exe", "s1_sp64_ship.exe", "iw6mp64_ship.exe", "iw6sp64_ship.exe", "h1_sp64_ship.exe", "h1_mp64_ship.exe" };
-            var exeFiles = Directory.EnumerateFiles("./", "*.exe").Select(f => Path.GetFileName(f));
-            foreach (var exeFile in exeFiles)
-            {
-                if (supportedGames.Contains(exeFile))
-                {
-                    return true;
-                }
-            }
-            return false;
+            string[] supportedGames = ["s1_mp64_ship.exe", "s1_sp64_ship.exe", "iw6mp64_ship.exe", "iw6sp64_ship.exe", "h1_sp64_ship.exe", "h1_mp64_ship.exe"];
+            return supportedGames.Intersect(Directory.EnumerateFiles(@".\", "*.exe").Select(f => Path.GetFileName(f))).Any();
         }
     }
 }
-
