@@ -39,6 +39,29 @@ namespace CoDFilesCleaner
                                 sw.WriteLine($"{file.Name} already exists in {currentDirName} but, does not contain the same content as {file.FullName}");
                             }
                         }
+                        if (file.Name.StartsWith("eng"))
+                        {
+                            Directory.CreateDirectory(@"english");
+                            if (!File.Exists(Path.Combine("english", file.Name)))
+                            {
+                                file.MoveTo(Path.Combine("english", file.Name));
+                                sw.WriteLine($"Moved {file.Name} to english"); // bruh
+                            }
+                            else
+                            {
+                                if (FilesAreSame(file.FullName, Path.Combine("english", file.Name)))
+                                {
+                                    file.Delete();
+                                    Program.DisplayMessage($"Duplicate {file.FullName} was deleted.", ConsoleColor.DarkYellow);
+                                    sw.WriteLine($"Duplicate {file.FullName} was deleted.");
+                                }
+                                else
+                                {
+                                    Program.DisplayMessage($"{file.Name} already exists in english but, does not contain the same content as {file.FullName}, skipping it", ConsoleColor.Red);
+                                    sw.WriteLine($"{file.Name} already exists in english but, does not contain the same content as {file.FullName}");
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -120,7 +143,7 @@ namespace CoDFilesCleaner
         public static void CleanAllFiles()
         {
             string currentDirectoryName = Path.GetFileName(Directory.GetCurrentDirectory());
-            FileInfo[]? files = new DirectoryInfo(Directory.GetCurrentDirectory()).GetFiles();
+            FileInfo[]? files = new DirectoryInfo(Directory.GetCurrentDirectory()).GetFiles("*", SearchOption.AllDirectories);
             
             var tempList = new List<FileInfo>();
             var sw = new StreamWriter("CoDFilesCleaner.log", true);
@@ -183,6 +206,15 @@ namespace CoDFilesCleaner
                 {
                     file.MoveTo(Path.Combine(englishZonePath, file.Name));
                     sw.WriteLine($"Moved {file.Name} to {currentDirectoryName}");
+                }
+            }
+
+            foreach (var dir in new DirectoryInfo(@".\").EnumerateDirectories("*", SearchOption.AllDirectories))
+            {
+                if (!dir.EnumerateFiles("*", SearchOption.AllDirectories).Any())
+                {
+                    dir.Delete();
+                    sw.WriteLine($"Removed empty {dir.Name}");
                 }
             }
 
