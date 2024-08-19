@@ -4,7 +4,8 @@
     {
     static void Main()
         {
-            Console.Title = "CoDFilesCleaner by Praveshan";
+            Console.Title = "CoD Files Cleaner";
+            Console.CursorVisible = false;
             if (!IsSupportedGameDir())
             {
                 DisplayMessage("Please run this appliction in your Advanced Warfare, Ghosts or Modern Warfare Remastered Game Directory.", ConsoleColor.Red);
@@ -23,11 +24,7 @@
                 switch (Console.ReadKey(true).Key)
                 {
                     case ConsoleKey.C:
-                        Console.WriteLine("Cleaning...");
                         Files.CleanAllFiles();
-                        DisplayMessage("File Changes were saved at CoDFileCleaner.log", ConsoleColor.Cyan);
-                        Console.WriteLine("Press any key to continue...");
-                        Console.ReadKey(true);
                         break;
 
                     case ConsoleKey.U:
@@ -39,9 +36,6 @@
                             break;
                         }
                         Files.UndoClean();
-                        DisplayMessage("File Changes were saved at CoDFileCleaner.log", ConsoleColor.Cyan);
-                        Console.WriteLine("Press any key to continue...");
-                        Console.ReadKey(true);
                         break;
                 }
 
@@ -50,10 +44,9 @@
         }
         public static void DisplayMessage(string message, ConsoleColor messageColor)
         {
-            ConsoleColor currentColor = Console.ForegroundColor;
             Console.ForegroundColor = messageColor;
             Console.WriteLine(message);
-            Console.ForegroundColor = currentColor;
+            Console.ForegroundColor = ConsoleColor.Gray;
         }
         private static bool IsSupportedGameDir()
         {
