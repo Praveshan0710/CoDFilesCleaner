@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "CoDFilesCleaner": {
+      "commandName": "Project",
+      "workingDirectory": "D:\\iw6_test_dir"
+    }
+  }
+}

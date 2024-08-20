@@ -19,7 +19,7 @@
             {
                 Console.Clear();
                 DisplayMessage("[C] Clean your game files", ConsoleColor.Cyan);
-                DisplayMessage("[U] Undo cleaning, match Steam install (MWR only)", ConsoleColor.Cyan);
+                DisplayMessage("[U] Undo cleaning to match the Steam Install", ConsoleColor.Cyan);
 
                 switch (Console.ReadKey(true).Key)
                 {
@@ -28,13 +28,6 @@
                         break;
 
                     case ConsoleKey.U:
-                        if (!File.Exists("h1_sp64_ship.exe") || !File.Exists("h1_mp64_ship.exe"))
-                        {
-                            DisplayMessage("This only supports Modern Warfare Remastered", ConsoleColor.Red);
-                            Console.WriteLine("Press any key to continue...");
-                            Console.ReadKey(true);
-                            break;
-                        }
                         Files.UndoClean();
                         break;
                 }

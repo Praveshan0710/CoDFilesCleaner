@@ -10,6 +10,7 @@ namespace CoDFilesCleaner
             "german",
             "russian",
             "polish",
+            "japanese",
             "japanese_partial",
             "korean",
             "portuguese",
@@ -28,21 +29,6 @@ namespace CoDFilesCleaner
 
             if (Directory.Exists(dirs[0]))
             {
-                /*ReadOnlySpan<string> languageDirs = 
-                    ["english",
-                    "english_safe",
-                    "french",
-                    "german",
-                    "russian",
-                    "polish",
-                    "japanese_partial",
-                    "korean",
-                    "portuguese",
-                    "spanish",
-                    "italian",
-                    "simplified_chinese",
-                    "traditional_chinese"];*/
-
                 foreach (var languageDir in languageDirs)
                 {
                     var langDir = Path.Combine("zone", languageDir);
@@ -63,13 +49,11 @@ namespace CoDFilesCleaner
                         if (!File.Exists(file.Name))
                         {
                             file.MoveTo(file.Name);
-                            //Debug.WriteLine($"Moved {file} to {currentDirName}");
                             sw.WriteLine($"Moved {file} to {currentDirName}");
                         }
                         else
                         {
-                            //byte by byte compare
-                            if (FilesAreSame(file.FullName, file.Name))
+                            if (FilesAreSame(file.FullName, file.Name)) // If the file exists in the game root already
                             {
                                 file.Delete();
                                 Program.DisplayMessage($"Duplicate {file.Name} was deleted.", ConsoleColor.DarkYellow);
@@ -92,7 +76,6 @@ namespace CoDFilesCleaner
                     if (!Directory.EnumerateFiles(dir, "*", SearchOption.AllDirectories).Any())
                     {
                         Directory.Delete(dir, true);
-                        //Debug.WriteLine($"Removed empty directory {dir}");
                         sw.WriteLine($"Removed empty directory {dir}");
                     }
                     else
@@ -107,13 +90,6 @@ namespace CoDFilesCleaner
             Console.WriteLine("Press any key to continue...");
             Console.ReadKey(true);
         }
-
-        /*private static void LogChange(string message)
-        {
-            using var sw = new StreamWriter("CoDFileCleaner.log", true);
-            sw.WriteLine(message);
-        }*/
-
         public static bool FilesAreSame(string file1, string file2)
         {
             int file1byte;
@@ -169,21 +145,6 @@ namespace CoDFilesCleaner
             const string zonePath = "zone";
             const string bikPath = @"raw\video";
 
-            /*ReadOnlySpan<string> languageDirs =
-            ["english",
-            "english_safe",
-            "french",
-            "german",
-            "russian",
-            "polish",
-            "japanese_partial",
-            "korean",
-            "portuguese",
-            "spanish",
-            "italian",
-            "simplified_chinese",
-            "traditional_chinese"];*/
-
             foreach (var file in new DirectoryInfo(Directory.GetCurrentDirectory()).EnumerateFiles())
             {
                 switch (file.Extension)
@@ -214,10 +175,10 @@ namespace CoDFilesCleaner
             }
 
             sw.Dispose();
+
             Program.DisplayMessage("Logged changes at CoDFilesCleaner.log", ConsoleColor.Cyan);
             Console.WriteLine("Press any key to continue...");
             Console.ReadKey(true);
-
         }
     }
 }

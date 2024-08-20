@@ -1,0 +1,20 @@
+﻿treat language pak files // done but, not in a good way
+redo logging // the current one just isn't good
+test for cod ghosts .ffo files // unneeded
+
+
+
+
+english
+english_safe
+french
+german
+russian
+polish
+japanese_partial
+korean
+portuguese
+spanish
+italian
+simplified_chinese
+traditional_chinese
